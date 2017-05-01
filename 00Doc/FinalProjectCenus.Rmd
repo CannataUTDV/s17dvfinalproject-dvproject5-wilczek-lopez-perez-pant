@@ -39,7 +39,24 @@ The csv files containing our data of interest were passed through individual ETL
  source("../01Data/ETL_dominant_race.R")
 ```
 
-#**Tableau Visualizations**
+#**Tableau Visualizations Steps**
+
+##**Boxplot Visualization Steps**
+
+####**Step 1 - Retrieving our Data**
+We pulled in 3 data sets from our project that originated from the US Census (median_income.csv, median_age.csv, and dominant_race.csv).We found that some columns in these data sets had to be grouped, so we included our SQL code at the bottom of the project that describes how we created bins for ages, incomes, and dominant races.For this same reason, we did not pull from the Census Bureau's data. Instead, we used the data.world connector to retrieve everything from our final project site on data.world. This is where we also pulled the Cause of Death data set. These files were inner joined on ZIP Code to analyze cause and count of death to median income, dominant race, and median age in each ZIP Code.
+
+####**Step 2 - Boxplot Overview**
+In order to create our box plot we set causes of deathas the columns which can be seen along the x-axis of the plot. The row are set as the count of deaths as seen on the y-axis of the plot. Each zip code has a corresponding point on the boxplot for each cause of death. We set dominant race as the color of the points in the plot. Therefore, the color of each point depends on each zip code's dominant race. The boxes along each column mark the 25th to 75th percentile of counts of deaths per zip code for each cause. The whiskers mark the highest and lowest count values considered to not be outliers. 
+
+####**Step 3 - Filter**
+We added a filter to this boxplot in order to define the range of the median incomes of the zipcodes displyed. 
+
+##**Histogram Visualization Steps**
+
+##**Scatter Plot Visualization Steps**
+
+##**Crosstab Visualization Steps**
 
 ##**Barchart Visualization Steps**
 
