@@ -19,43 +19,36 @@ online0 = TRUE
 #   tab specific queries and plotting
 
 # The following query is for the select list in the Boxplots -> Simple Boxplot tab, and Barcharts -> Barchart with Table Calculation tab.
-if(online0) {
-  regions = query(
-    data.world(propsfile = "www/.data.world"),
-    dataset="cannata/superstoreorders", type="sql",
-    query="select distinct Region as D, Region as R
-    from SuperStoreOrders
-    order by 1"
-  ) # %>% View()
-} else {
-  print("Getting Regions from csv")
-  file_path = "www/SuperStoreOrders.csv"
-  df <- readr::read_csv(file_path) 
-  tdf1 = df %>% dplyr::distinct(Region) %>% arrange(Region) %>% dplyr::rename(D = Region)
-  tdf2 = df %>% dplyr::distinct(Region) %>% arrange(Region) %>% dplyr::rename(R = Region)
-  regions = bind_cols(tdf1, tdf2)
-}
-region_list <- as.list(regions$D, regions$R)
-region_list <- append(list("All" = "All"), region_list)
-region_list5 <- region_list
+# if(online0) {
+#   regions = query(
+#     data.world(propsfile = "www/.data.world"),
+#     dataset="tommywilczek/s-17-dv-final-project", type="sql",
+#     query="select distinct dominant_race.Dominant as D, dominant_race.Dominant as R
+#     from dominant_race
+#     order by 1"
+#   ) # %>% View()
+# }
+# region_list <- as.list(regions$D, regions$R)
+# region_list <- append(list("All" = "All"), region_list)
+# region_list5 <- region_list
 
 # The following queries are for the Barcharts -> High Discount Orders tab data.
 if(online0) {
-  # Step 1:
+# Step 1:
   highDiscounts <- query(
-    data.world(propsfile = "www/.data.world"),
-    dataset="cannata/superstoreorders", type="sql",
-    query="
-    SELECT distinct Order_Id, sum(Discount) as sumDiscount, sum(Sales) as
-    sumSales
-    FROM SuperStoreOrders
-    where Region != 'International'
-    group by Order_Id
-    having sum(Discount) >= .3"
-  ) # %>% View()
+  data.world(propsfile = "www/.data.world"),
+  dataset="cannata/superstoreorders", type="sql",
+  query="
+  SELECT distinct Order_Id, sum(Discount) as sumDiscount, sum(Sales) as
+  sumSales
+  FROM SuperStoreOrders
+  where Region != 'International'
+  group by Order_Id
+  having sum(Discount) >= .3"
+) # %>% View()
   # View(highDiscounts )
-  
-  # Step 2
+
+# Step 2
   highDiscountCustomers <- query(
     data.world(propsfile = "www/.data.world"),
     dataset="cannata/superstoreorders", type="sql",
@@ -67,51 +60,51 @@ if(online0) {
     order by Order_Id",
     queryParameters = highDiscounts$Order_Id
   ) # %>% View()
-  # View(highDiscountCustomers)
-  
-  # Step 3
-  stateAbreviations <- query(
-    data.world(propsfile = "www/.data.world"),
-    dataset="cannata/superstoreorders", type="sql",
-    query="SELECT distinct name as State, abbreviation as Abbreviation
-    FROM markmarkoh.`us-state-table`.`state_table.csv/state_table`
-    where name in
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    order by name",
-    queryParameters = highDiscountCustomers$State
-  ) # %>% View()
-  # View(stateAbreviations )
-  
-  # Step 4
-  highDiscountCustomers2 <- left_join(highDiscountCustomers,
-                                      stateAbreviations, by="State") # %>% View()
-  # View(highDiscountCustomers2)
-  
-  # Step 5
-  longLat <- query(
-    data.world(propsfile = "www/.data.world"),
-    dataset="cannata/superstoreorders", type="sql",
-    query="SELECT distinct NAME as City, STATE as Abbreviation,
-    LATITUDE AS Latitude,
-    LONGITUDE AS Longitude
-    FROM bryon.`dhs-city-location-example`.`towns.csv/towns`
-    where NAME in
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    order by NAME",
-    queryParameters = highDiscountCustomers$City
-  ) # %>% View()
-  # View(longLat)
-  
-  # Step 6
-  highDiscountCustomers2LongLat <- 
-    inner_join(highDiscountCustomers2, longLat, by = c("City", "Abbreviation")) 
-  # View(highDiscountCustomers2LongLat)
-  
-  # Step 7
-  discounts <- 
-    inner_join(highDiscountCustomers2LongLat, highDiscounts, by="Order_Id") # %>% View()
-  # View(discounts)
-  
+    # View(highDiscountCustomers)
+    
+# Step 3
+    stateAbreviations <- query(
+      data.world(propsfile = "www/.data.world"),
+      dataset="cannata/superstoreorders", type="sql",
+      query="SELECT distinct name as State, abbreviation as Abbreviation
+      FROM markmarkoh.`us-state-table`.`state_table.csv/state_table`
+      where name in
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      order by name",
+      queryParameters = highDiscountCustomers$State
+    ) # %>% View()
+    # View(stateAbreviations )
+    
+# Step 4
+    highDiscountCustomers2 <- left_join(highDiscountCustomers,
+                                        stateAbreviations, by="State") # %>% View()
+    # View(highDiscountCustomers2)
+    
+# Step 5
+    longLat <- query(
+      data.world(propsfile = "www/.data.world"),
+      dataset="cannata/superstoreorders", type="sql",
+      query="SELECT distinct NAME as City, STATE as Abbreviation,
+      LATITUDE AS Latitude,
+      LONGITUDE AS Longitude
+      FROM bryon.`dhs-city-location-example`.`towns.csv/towns`
+      where NAME in
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      order by NAME",
+      queryParameters = highDiscountCustomers$City
+    ) # %>% View()
+    # View(longLat)
+    
+# Step 6
+    highDiscountCustomers2LongLat <- 
+      inner_join(highDiscountCustomers2, longLat, by = c("City", "Abbreviation")) 
+    # View(highDiscountCustomers2LongLat)
+    
+# Step 7
+    discounts <- 
+      inner_join(highDiscountCustomers2LongLat, highDiscounts, by="Order_Id") # %>% View()
+    # View(discounts)
+
   OLDdiscounts <- query(
     data.world(propsfile = "www/.data.world"),
     dataset="cannata/superstoreorders", type="sql",
@@ -163,10 +156,10 @@ if(online0) {
     select Customer_Id, sum(Profit) as sumProfit
     FROM SuperStoreOrders
     where Order_Id in 
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     group by Customer_Id",
     queryParameters = highDiscounts$Order_Id
-  ) # %>% View()
+    ) # %>% View()
   # View(sales)
 } else {
   print("Getting discounts from csv")
@@ -185,7 +178,7 @@ if(online0) {
 shinyServer(function(input, output) {   
   # These widgets are for the Box Plots tab.
   online5 = reactive({input$rb5})
-  output$boxplotRegions <- renderUI({selectInput("selectedBoxplotRegions", "Choose Regions:",
+  output$boxplotRegions <- renderUI({selectInput("selectedBoxplotRegions", "Choose Races:",
                                                  region_list5, multiple = TRUE, selected='All') })
   
   # These widgets are for the Histogram tab.
@@ -205,44 +198,37 @@ shinyServer(function(input, output) {
   
   # Begin Box Plot Tab ------------------------------------------------------------------
   dfbp1 <- eventReactive(input$click5, {
-    if(input$selectedBoxplotRegions == 'All') region_list5 <- input$selectedBoxplotRegions
-    else region_list5 <- append(list("Skip" = "Skip"), input$selectedBoxplotRegions)
+    # if(input$selectedBoxplotRegions == 'All') region_list5 <- input$selectedBoxplotRegions
+    # else region_list5 <- append(list("Skip" = "Skip"), input$selectedBoxplotRegions)
     if(online5() == "SQL") {
       print("Getting from data.world")
       df <- query(
         data.world(propsfile = "www/.data.world"),
-        dataset="cannata/superstoreorders", type="sql",
-        query="select Category, Sales, Region, Order_Date
-        from SuperStoreOrders
-        where (? = 'All' or Region in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?))",
-        queryParameters = region_list5 ) # %>% View()
+        dataset="tommywilczek/s-17-dv-final-project", type="sql",
+        query="select deaths_clean.`Causes of Death` as causeof, Median_Income_Raw.`Median Household Income` as medianof, sum(deaths_clean.Count) as sum_count, dominant_race.Dominant as dominant
+        from deaths_clean inner join Median_Income_Raw on deaths_clean.`ZIP Code` = Median_Income_Raw.Zipcode inner join dominant_race on Median_Income_Raw.Zipcode = dominant_race.ZipCode
+        group by deaths_clean.`Causes of Death`, Median_Income_Raw.`Median Household Income`, dominant_race.Dominant")
     }
-    else {
-      print("Getting from csv")
-      file_path = "www/SuperStoreOrders.csv"
-      df <- readr::read_csv(file_path)
-      df %>% dplyr::select(Category, Sales, Region, Order_Date) %>% dplyr::filter(Region %in% input$selectedBoxplotRegions | input$selectedBoxplotRegions == "All") # %>% View()
-    }
-  })
+    })
   
   output$boxplotData1 <- renderDataTable({DT::datatable(dfbp1(), rownames = FALSE,
-                                                        extensions = list(Responsive = TRUE, 
-                                                                          FixedHeader = TRUE)
+                                                extensions = list(Responsive = TRUE, 
+                                                FixedHeader = TRUE)
   )
   })
   
   dfbp2 <- eventReactive(c(input$click5, input$boxSalesRange1), {
-    dfbp1() %>% dplyr::filter(Sales >= input$boxSalesRange1[1] & Sales <= input$boxSalesRange1[2]) # %>% View()
+    dfbp1() %>% dplyr::filter(sum_count >= input$boxSalesRange1[1] & sum_count <= input$boxSalesRange1[2]) # %>% View()
   })
   
-  dfbp3 <- eventReactive(c(input$click5, input$range5a), {
-    dfbp2() %>% dplyr::filter(lubridate::year(Order_Date) == as.integer(input$range5a) & lubridate::quarter(Order_Date) == (4 * (input$range5a - as.integer(input$range5a))) + 1) %>% dplyr::arrange(desc(Order_Date)) # %>% View()
-  })
-  
+  # dfbp3 <- eventReactive(c(input$click5, input$range5a), {
+  #   dfbp2() %>% dplyr::arrange(desc(medianof)) # %>% View()
+  # })
+    
   output$boxplotPlot1 <- renderPlotly({
     #View(dfbp3())
-    p <- ggplot(dfbp3()) + 
-      geom_boxplot(aes(x=Category, y=Sales, colour=Region)) + 
+    p <- ggplot(dfbp2()) + 
+      geom_boxplot(aes(x=causeof, y=sum_count, colour=dominant)) + 
       ylim(0, input$boxSalesRange1[2]) +
       theme(axis.text.x=element_text(angle=90, size=10, vjust=0.5))
     ggplotly(p)
@@ -264,7 +250,7 @@ shinyServer(function(input, output) {
       ) # %>% View()
     }
     
-    })
+  })
   
   output$histogramData1 <- renderDataTable({DT::datatable(dfh1(), rownames = FALSE,
                                                           extensions = list(Responsive = TRUE, 
@@ -285,10 +271,10 @@ shinyServer(function(input, output) {
       print("Getting from data.world")
       query(
         data.world(propsfile = "www/.data.world"),
-        dataset="cannata/superstoreorders", type="sql",
-        query="select Sales, Profit, State
-        from SuperStoreOrders
-        where State = 'Texas' or State = 'Florida'"
+        dataset="tommywilczek/s-17-dv-final-project", type="sql",
+        query="select deaths_clean.`Causes of Death` as causeof, Median_Age_Raw.`Median Age` as medianof, sum(deaths_clean.Count) as sum_count
+        from deaths_clean inner join Median_Age_Raw on deaths_clean.`ZIP Code` = Median_Age_Raw.`Zip Code`
+        group by deaths_clean.`Causes of Death`, Median_Age_Raw.`Median Age`"
       ) # %>% View()
     }
     else {
@@ -304,14 +290,13 @@ shinyServer(function(input, output) {
   )
   })
   output$scatterPlot1 <- renderPlotly({p <- ggplot(dfsc1()) + 
-    theme(axis.text.x=element_text(angle=90, size=16, vjust=0.5)) + 
+    theme(axis.text.x=element_text(angle=90, size=16, vjust=3)) + 
     theme(axis.text.y=element_text(size=16, hjust=0.5)) +
-    geom_point(aes(x=Sales, y=Profit, colour=State), size=2)
+    geom_point(aes(x=medianof, y=sum_count, colour=causeof), size=2)
   ggplotly(p)
   })
   # End Scatter Plots Tab ___________________________________________________________
   
-  # Begin Crosstab Tab ------------------------------------------------------------------
   # Begin Crosstab Tab ------------------------------------------------------------------
   dfct1 <- eventReactive(input$click1, {
     if(online1() == "SQL") {
@@ -353,50 +338,37 @@ shinyServer(function(input, output) {
       geom_text(aes(x=Race, y=Cause_of_Death, label=Number_of_Deaths), size=6) +
       geom_tile(aes(x=Race, y=Cause_of_Death, fill=kpi_level), alpha=0.50)
   })
-  
   # End Crosstab Tab ___________________________________________________________
-  # Begin Barchart Tab ------------------------------------------------------------------
-  dfbc1 <- eventReactive(input$click2, {
-    #if(input$selectedRegions == 'All') region_list <- input$selectedRegions
-    #else region_list <- append(list("Skip" = "Skip"), input$selectedRegions)
-    if(online2() == "SQL") {
+# Begin Barchart Tab ------------------------------------------------------------------
+  dfc1 <- eventReactive(input$click2, {
+    if(online1() == "SQL") {
       print("Getting from data.world")
       tdf = query(
         data.world(propsfile = "www/.data.world"),
         dataset="tommywilczek/s-17-dv-final-project", type="sql",
         query="select deaths_clean.`Causes of Death` as causeof, 
-        `Median_Age_Raw.csv/Median_Age_Raw`.`Median Age` as medianof, 
-        (sum(deaths_clean.Count)/(count(distinct(deaths_clean.`ZIP Code`)))) as Weighted_sum_count 
-        from deaths_clean inner join Median_Age_Raw on deaths_clean.`ZIP Code` = `Median_Age_Raw.csv/Median_Age_Raw`.`Zip Code`
-        group by deaths_clean.`Causes of Death`, `Median_Age_Raw.csv/Median_Age_Raw`.`Median Age`",
-        
-        queryParameters = region_list
+        `median_age.csv/median_age`.MedianAge as medianof, 
+        (sum(deaths_clean.Count)/(count(distinct(deaths_clean.`ZIP Code`)))) as Weighted_sum_count, 
+        deaths_clean.`ZIP Code` as ZIPcode
+        from deaths_clean inner join `median_age.csv/median_age` on deaths_clean.`ZIP Code` = `median_age.csv/median_age`.ZipCode
+        group by deaths_clean.`Causes of Death`, `median_age.csv/median_age`.MedianAge"
       ) # %>% View()
     }
-    
     # The following two lines mimic what can be done with Analytic SQL. Analytic SQL does not currently work in data.world.
-    #tdf2 = tdf %>% group_by(medianof) %>% summarize(window_countof = mean(Weighted_sum_count))
-    #dplyr::inner_join(tdf, tdf2, by = "causeof")
-    # Analytic SQL would look something like this:
-    # select Category, Region, sum_sales, avg(sum_sales) 
-    # OVER (PARTITION BY Category ) as window_avg_sales
-    # from (select Category, Region, sum(Sales) sum_sales
-    #       from SuperStoreOrders
-    #      group by Category, Region)
+    tdf2 = tdf %>% group_by(medianof) %>% summarize(window_countof= mean(Weighted_sum_count))
+    dplyr::inner_join(tdf, tdf2, by = "medianof")
+    
   })
-  output$barchartData1 <- renderDataTable({DT::datatable(dfbc1(),
-                        rownames = FALSE,
-                        extensions = list(Responsive = TRUE, FixedHeader = TRUE) )
+  output$barchartData1 <- renderDataTable({DT::datatable(dfc1(), rownames = FALSE,
+                                                         extensions = list(Responsive = TRUE, FixedHeader = TRUE)
+  )
   })
   output$barchartData2 <- renderDataTable({DT::datatable(discounts,
                                                          rownames = FALSE,
                                                          extensions = list(Responsive = TRUE, FixedHeader = TRUE) )
   })
-  output$barchartData3 <- renderDataTable({DT::datatable(sales,
-                                                         rownames = FALSE,
-                                                         extensions = list(Responsive = TRUE, FixedHeader = TRUE) )
-  })
-  output$barchartPlot1 <- renderPlot({ggplot(dfbc1(), aes(x=causeof, y=Weighted_sum_count)) +
+
+  output$barchartPlot1 <- renderPlot({ggplot(dfc1(), aes(x=causeof, y=Weighted_sum_count)) +
       scale_y_discrete(labels = scales::comma) + # no scientific notation
       theme(axis.text.x=element_text(angle=0, size=12, vjust=0.5)) + 
       theme(axis.text.y=element_text(size=12, hjust=0.5)) +
@@ -404,13 +376,27 @@ shinyServer(function(input, output) {
       facet_wrap(~medianof, ncol=1) + 
       coord_flip() + 
       # Add sum_sales - window_avg_sales label.
-      geom_text(mapping=aes(x=causeof, y=Weighted_sum_count, label=round(Weighted_sum_count - mean(Weighted_sum_count))),colour="black", hjust=-.5) +
-      geom_text(mapping=aes(x=causeof, y=Weighted_sum_count, label=round(Weighted_sum_count - mean(Weighted_sum_count))),colour="blue", hjust=-2) +
+      geom_text(mapping=aes(x=causeof, y=Weighted_sum_count, label=round(Weighted_sum_count)),colour="red", hjust=-.5) +
       # Add reference line.
-    geom_hline(aes(yintercept = mean(Weighted_sum_count)), color="red")
-    geom_text(aes( -1, mean(Weighted_sum_count), label = mean(Weighted_sum_count), vjust = -.5, hjust = -.25), color="red")
+      geom_hline(aes(yintercept = round(window_countof)), color="red")
   })
   
+  thismap = query(
+    data.world(propsfile = "www/.data.world"),
+    dataset="tommywilczek/s-17-dv-final-project", type="sql",
+    query="
+    select `Crosstab.csv/Crosstab`.`Death Count` as deathCount, 
+    `Crosstab.csv/Crosstab`.`Causes of Death` as cause_of_death, 
+    `Crosstab.csv/Crosstab`.ZipCode as zipcode, 
+    `zipLatLong.csv/zipLatLong`.latitude as latitude, 
+    `zipLatLong.csv/zipLatLong`.longitude as longitude
+    
+    from `Crosstab.csv/Crosstab`
+    
+    inner join `zipLatLong.csv/zipLatLong` on `Crosstab.csv/Crosstab`.ZipCode = `zipLatLong.csv/zipLatLong`.zipcode
+    where `Crosstab.csv/Crosstab`.`Death Count` > 1000 and `Crosstab.csv/Crosstab`.`Causes of Death` = 'CAN'
+    ")  
+
   output$barchartMap1 <- renderLeaflet({leaflet(width = 400, height = 800) %>% 
       setView(lng = -98.35, lat = 39.5, zoom = 4) %>% 
       addTiles() %>% 
@@ -424,25 +410,118 @@ shinyServer(function(input, output) {
                                             " Sales: ","$", formatC(as.numeric(discounts$sumSales), format="f", digits=2, big.mark=","),
                                             " Discount: ", ", ", discounts$sumDiscount)) )
   })
+
+  getColor <- function(thismap) {
+    sapply(thismap$deathCount, function(deathCount) {
+      if(deathCount <= 1500) {
+        "green"
+      } else if(deathCount <= 2000) {
+        "orange"
+      } else {
+        "red"
+      } })
+  }
   
-  output$barchartPlot2 <- renderPlotly({
-    # The following ggplotly code doesn't work when sumProfit is negative.
-    p <- ggplot(sales, aes(x=as.character(Customer_Id), y=sumProfit)) +
-      theme(axis.text.x=element_text(angle=0, size=12, vjust=0.5)) + 
-      theme(axis.text.y=element_text(size=12, hjust=0.5)) +
-      geom_bar(stat = "identity")
-    ggplotly(p)
-    # So, using plot_ly instead.
-    plot_ly(
-      data = sales,
-      x = ~as.character(Customer_Id),
-      y = ~sumProfit,
-      type = "bar"
-    ) %>%
-      layout(
-        xaxis = list(type="category", categoryorder="category ascending")
-      )
+  icons <- awesomeIcons(
+    icon = 'ios-close',
+    iconColor = 'black',
+    library = 'ion',
+    markerColor = getColor(thismap)
+  )
+  
+  output$barchartMap1 <- renderLeaflet({leaflet(data = thismap, width = 400, height = 800) %>% 
+      setView(lng = -119.9, lat = 37.2, zoom = 5) %>% 
+      addTiles() %>% 
+      #addProviderTiles("MapQuestOpen.Aerial") %>%
+      addAwesomeMarkers( lng = thismap$longitude, lat = thismap$latitude, icon=icons,
+                         options = markerOptions(draggable = TRUE, riseOnHover = TRUE),
+                         popup = as.character(paste( "Zip:", thismap$zipcode, hr(), 
+                                                     "Cause of Death:", thismap$cause_of_death,hr(),
+                                                     "Death Count:", thismap$deathCount
+                                                     
+                         )) )
   })
+
   # End Barchart Tab ___________________________________________________________
+  # MAPS ------------------------------------------------------------------------------
+  # dfbc1 <- eventReactive(input$click2, {
+  #   if(input$selectedRegions == 'All') region_list <- input$selectedRegions
+  #   else region_list <- append(list("Skip" = "Skip"), input$selectedRegions)
+  #   if(online2() == "SQL") {
+  #     print("Getting from data.world")
+  #     tdf = query(
+  #       data.world(propsfile = "www/.data.world"),
+  #       dataset="tommywilczek/s-17-dv-final-project", type="sql",
+  #       query="
+  #       select `Crosstab.csv/Crosstab`.`Death Count` as deathCount, 
+  #       `Crosstab.csv/Crosstab`.`Causes of Death` as cause_of_death, 
+  #       `Crosstab.csv/Crosstab`.ZipCode as zipcode, 
+  #       `zipLatLong.csv/zipLatLong`.latitude as latitude, 
+  #       `zipLatLong.csv/zipLatLong`.longitude as longitude
+  #       
+  #       from `Crosstab.csv/Crosstab`
+  #       
+  #       inner join `zipLatLong.csv/zipLatLong` on `Crosstab.csv/Crosstab`.ZipCode = `zipLatLong.csv/zipLatLong`.zipcode
+  #       ",
+  #       queryParameters = region_list
+  #     ) # %>% View()
+  #   }
+  #   
+  #   
+  # })
+  # 
+  # thismap = query(
+  #   data.world(propsfile = "www/.data.world"),
+  #   dataset="tommywilczek/s-17-dv-final-project", type="sql",
+  #   query="
+  #   select `Crosstab.csv/Crosstab`.`Death Count` as deathCount, 
+  #   `Crosstab.csv/Crosstab`.`Causes of Death` as cause_of_death, 
+  #   `Crosstab.csv/Crosstab`.ZipCode as zipcode, 
+  #   `zipLatLong.csv/zipLatLong`.latitude as latitude, 
+  #   `zipLatLong.csv/zipLatLong`.longitude as longitude
+  #   
+  #   from `Crosstab.csv/Crosstab`
+  #   
+  #   inner join `zipLatLong.csv/zipLatLong` on `Crosstab.csv/Crosstab`.ZipCode = `zipLatLong.csv/zipLatLong`.zipcode
+  #   where `Crosstab.csv/Crosstab`.`Death Count` > 1000 and `Crosstab.csv/Crosstab`.`Causes of Death` = 'CAN'
+  #   ")
+  # 
+  # output$barchartData1 <- renderDataTable({DT::datatable(dfbc1(),
+  #                                                        rownames = FALSE,
+  #                                                        extensions = list(Responsive = TRUE, FixedHeader = TRUE) )
+  # })
+  # 
+  # 
+  # getColor <- function(thismap) {
+  #   sapply(thismap$deathCount, function(deathCount) {
+  #     if(deathCount <= 1500) {
+  #       "green"
+  #     } else if(deathCount <= 2000) {
+  #       "orange"
+  #     } else {
+  #       "red"
+  #     } })
+  # }
+  # 
+  # icons <- awesomeIcons(
+  #   icon = 'ios-close',
+  #   iconColor = 'black',
+  #   library = 'ion',
+  #   markerColor = getColor(thismap)
+  # )
+  # 
+  # output$barchartMap1 <- renderLeaflet({leaflet(data = thismap, width = 400, height = 800) %>% 
+  #     setView(lng = -119.9, lat = 37.2, zoom = 5) %>% 
+  #     addTiles() %>% 
+  #     #addProviderTiles("MapQuestOpen.Aerial") %>%
+  #     addAwesomeMarkers( lng = thismap$longitude, lat = thismap$latitude, icon=icons,
+  #                        options = markerOptions(draggable = TRUE, riseOnHover = TRUE),
+  #                        popup = as.character(paste( "Zip:", thismap$zipcode, hr(), 
+  #                                                    "Cause of Death:", thismap$cause_of_death,hr(),
+  #                                                    "Death Count:", thismap$deathCount
+  #                                                    
+  #                        )) )
+  # })
   
-  })
+  
+})
