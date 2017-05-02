@@ -41,160 +41,84 @@ The csv files containing our data of interest were passed through individual ETL
 
 #**Tableau Visualizations Steps**
 
+##**Retrieving our Data**
+We pulled in 3 grouped data sets from our project that originated from the US Census (Median_Income_Raw.csv, and Median_Age_Raw.csv). In addition, we grouped a set from race deomgraphics Census data to create the domianat_race.csv. In order to create this file, we queried the orginal census data in a way we could define the domianant race in each zip code.A new column was added to the data set indicating the most represented race in each zip code. We used the data.world connector to retrieve everything from our final project site on data.world. This is where we also pulled the Cause of Death data set. These files were inner joined on ZIP Code to analyze cause and count of death to median income, dominant race, and median age in each ZIP Code.
+
 ##**Boxplot Visualization Steps**
 
-####**Step 1 - Retrieving our Data**
-We pulled in 3 data sets from our project that originated from the US Census (median_income.csv, median_age.csv, and dominant_race.csv).We found that some columns in these data sets had to be grouped, so we included our SQL code at the bottom of the project that describes how we created bins for ages, incomes, and dominant races.For this same reason, we did not pull from the Census Bureau's data. Instead, we used the data.world connector to retrieve everything from our final project site on data.world. This is where we also pulled the Cause of Death data set. These files were inner joined on ZIP Code to analyze cause and count of death to median income, dominant race, and median age in each ZIP Code.
-
-####**Step 2 - Boxplot Overview**
+####**Step 1 - Boxplot Overview**
 In order to create our box plot we set causes of deathas the columns which can be seen along the x-axis of the plot. The row are set as the count of deaths as seen on the y-axis of the plot. Each zip code has a corresponding point on the boxplot for each cause of death. We set dominant race as the color of the points in the plot. Therefore, the color of each point depends on each zip code's dominant race. The boxes along each column mark the 25th to 75th percentile of counts of deaths per zip code for each cause. The whiskers mark the highest and lowest count values considered to not be outliers. 
 
-####**Step 3 - Filter**
+####**Step 2 - Filter**
 We added a filter to this boxplot in order to define the range of the median incomes of the zipcodes displyed. 
 
 ##**Histogram Visualization Steps**
 
+####**Step 1 - Histogram Overview**
+For this plot we set our column as median household income and columns to count of people in the corresponding income. Therefore, each bar represents the count of people living in zip codes binned to corresponding median incomes. In addition, dominant race was added as a color to represent the count of people in that binned median income of zip codes of each dominant race. 
+
+####**Step 2 - Filter**
+For this plot race was set as a filter. The user can then filter which dominant race zip codes should be displayed in the binned population count.
+
 ##**Scatter Plot Visualization Steps**
+
+####**Step 1 -Scatter Plot Overview**
+In order to create our scatter plot we set our columns as our zip code median age and the rows as the count of deaths. Each point represents the count of deaths in a particular zip code. Color was added to these points to represent the dominant race in each zip code. 
+
+####**Step 2 -Pages**
+Pages were added to the visualization with respect to cause of death. Each page then only shows the count of deaths due to a specific cause for each zip code.
+
+####**Step 3 -Scatter Plot Map**
+Based on this data a map was created in a separate sheet. Points in the state of California correspond to the zip codes sampled. The size of the points correspond to the median income of each zip code.The color of each point corresponds to the most represented race in each zip code.
+
+####**Step 4 -Zip Code Lines Map**
+In addition, another map was reproduced in a different sheet dividing the state of california by zip code lines. Death count is represented as the color of the area of each zip code. A filter was created to only display zip codes with a the chosen range of deaths. 
+
+####**Step 3 -Actions**
+Both maps produced were set as a target sheets which can filter to only show zip codes displayed in the chosen page in the scatter plot sheet. Therefore, only zip codes affected by a certain cause of deaths will be displayed in the map if the corresponding cause is the selected page.
 
 ##**Crosstab Visualization Steps**
 
+####**Step 1 - Crosstab Overview**
+In order to create our crosstab we set race as our columns and cause of death as our rows. Text then was added in the cells as count of deaths pertaining to the cell. Each cell then contains the count of deaths for zip codes with a certain dominant race due to a certain cause. The color of the text as set as our KPI which is decribed in the next step.
+
+####**Step 2 - Calculated field: Average deaths per zip code**
+For our key preformance indicator we chose to divide the count found in the crosstab cells by the number of zipcodes accounting for the count. This give the averge count of deaths due to a certain cause per zip code of a certain dominant race. The color of the text in each cell corresponds to the avergae deaths per zip code in that cell.
+
 ##**Barchart Visualization Steps**
 
-####**Step 1 - Retrieving our Data**
-We pulled in 3 data sets from our project that originated from the US Census (median_income.csv, median_age.csv, and dominant_race.csv).We found that some columns in these data sets had to be grouped, so we included our SQL code at the bottom of the project that describes how we created bins for ages, incomes, and dominant races.For this same reason, we did not pull from the Census Bureau's data. Instead, we used the data.world connector to retrieve everything from our project 6 site on data.world. This is where we also pulled the Cause of Death data set. These files were inner joined on ZIP Code to analyze cause and count of death to median income, dominant race, and median age in each ZIP Code.
+####**Step 1 - Barchart Overview**
+We created barcharts between median age (one blue) and cause of death (second blue) in the columns slot. This then lists all the causes of death and within each cause of death lists the median age bins we created   The KPI- average deaths per zip code (green) was added as the row of the barcharts. With this average count we can compare the average number of people dying per zip code of a certain cause of death across zip codes of different median ages. This was done cosidering that certain median incomes were over represented in our data. Therefore the bars of our barchart represent the average count of deaths perzip code due to a certain cause in zip codes of a certain median income.
 
-####**Step 2 - Barchart Overview**
-We created barcharts between either median income, dominant race, or median age (one blue) and cause of death (second blue) in the row slot. This then lists all the causes of death and within each cause of death lists a row for either median age, or dominant race.  A sum of the count of deaths (green) was added as the column of the barcharts. With this count we can compare the number of people dying of a certain cause of death across zip codes of different median ages (for example). Nonetheless, we considered that certain races, and ages were over represented in our data. Therefore, we created a calculated field to add to our column slot named Weighted Race/Age Deaths which will be described in the following bullet. This calculated field allows us to recognize which populations are more likely to die of certain causes than predicting from a raw count of deaths.  
+####**Step 2 - Calculated Field: Average deaths per zip code**
+As mentioned, the calculated field used was average deaths per zip code. This takes the count of deaths and divides it by the number of zip codes represented.
 
+####**Step 3 - Reference Line**
+The parameter represented by reference lines takes the average of the averages of deaths per zip code across different median incomes due to the same cause of death. Therefore, one reference line is assigned to each cause of death to represent this parameter.
 
-####**Step 3 - Calculated Fields**
-Furthermore, as mentioned previously we created three calculated field producing a  Weighted count of Deaths for income, age, and dominant race. To illustrate the process we can take the deaths by race barchart as an example. The calculated field takes the count of deaths in a zip code dominanted by a certain race due to a certain cause and divides it by the total count of deaths in zip codes with that dominant race (regardless of cause of death). This calculated field creates a proportion of deaths due to certain causes that accounts for overrepresented races. We can then compare weighted proportions to more accurately predict which zip codes are more likely to have deaths of a certain cause with respect to their dominant race. This same process was followed for median income, and median age. These weighted count of death was added to the columns lot of our barcharts to create a separate barchart next to raw death count columns. The rows were maintained the same and columns were added to represent the weighted count of deaths.
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/CalculatedFields.png")
-```
-
-
-####**Step 4**
-
-#####**Table Caculations**
-
-The two table calculation pills we included in our Tableau file were "Calculated Diff from Avg" and "Calculated Weighted Diff from Avg." Reference lines were also included in our project. This can be seen in the "Race Table Calculations" visualization. In this case, reference lines were used to depict an average count of death by race for each cause of death. 
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/TableCalculations.png")
-```
-#####**Reference Lines** 
-
-We decided to use an average reference line for all our barcharts. This takes the average death count between different race dominanted zip codes (for eaxmple) for a certain cause of death and creates a representative line along our columns to visualize the average count. In addition, this average line was created for our weighted death count. The average weighted death count across different race dominanted zip codes (for example) was displayed for each cuase of death as a line acorss our columns.
-
-As shown below, reference lines were implemented in the "Age Reference Lines" visualization to depict the the average count of deaths by age group for each cause of death. 95% confidence intervals were also displayed on this visualization to show the reader that the true count of deaths within the actual age groups would fall within the purple highlighted range 95% of the time. 
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/AgeReferenceLines1.png")
-```
-#####**Formatting**
-
-Formatting is depicted in our Income ID Sets Bar chart. Because our y-axis units are Income, they are formatted as Currency.   All of these items are depicted in the visualizations below. 
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/Formatting.png")
-```
-
-#####**ID Sets**
-
-In order to use ID sets we defined 'at risk income brackets'. This was done by creating a bar graph listing different median incomes as bins and creating columns with weighted death counts for zipcodes of each median income (irrespective of cause of death). Zipcodes of median incomes with more than seven weighted death counts were categorized as 'at risk'. This is then taken to create another bar graph with causes of death listed as the bins and weighted count of death as the parameter of the height of the bars. By applying our 'at risk' ID Set we divide the bars in to a proportion at risk and a proportion out of risk. Therefore, for each cause of death we can recognize the amount of weighted deaths in zip codes with a weighted count of deaths above the thershold of seven weighted deaths. 
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/Sets.png")
-```
-
+####**Step 4 - Table Calculations**
+The table calculation takes the calculated average used as the parameter for our refernce line and subtracts this number from the average counts in each bar(resulting in a difference for each median income). This calculation is refered to as the difference from the average.
 
 #**Tableau Visualizations**
-####**Visualization Type 1 - BarGraphs**
+
+##**Visualization Type 1 - Bar Graphs**
 
 
 
-The following visualizations were created to give an understanding of how our weighted death counts was created and what our calculted field represents.
-
-#####**Weighted Death Count by Race Visualization**
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/WeightedRaceDeaths.png")
-```
-The upper graph shows count of deaths for each race. However, in some cases, there are more deaths in a certain group simply because there is a larger population within that group. 
-The lower graph accounts for that by taking the count of deaths as a percentage of the total population that belongs to its associated group.
-
-#####**Weighted Death Count by Income Visualization**
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/WeightedIncomeDeaths.png")
-```
-
-The upper graph shows count of deaths for each income group. However, in some cases, there are more deaths in a certain group simply because there is a larger population within that group. 
-The lower graph accounts for that by taking the count of deaths as a percentage of the total population that belongs to its associated group.
-
-#####**Weighted Death Count by Age Visualization**
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/WeightedAgeDeaths.png")
-```
-The upper graph shows count of deaths for each age group. However, in some cases, there are more deaths in a certain group simply because there is a larger population within that group. 
-The lower graph accounts for that by taking the count of deaths as a percentage of the total population that belongs to its associated group.
-
-####**Visualization Type 2 - Bar Charts**
-
-The following barcharts were created with the process descibed in the Tableau visualization steps.  
 
 
-#####**Dominant Race Barchart**
 
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/RaceTableCalculations1.png")
-```
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/RaceTableCalculations2.png")
-```
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/RaceTableCalculations3.png")
-```
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/RaceTableCalculations4.png")
-```
 
-Looking at the tables on the left, which show the unweighted death counts, one would think white people are more likely to die from just about everything. However, this is simply because there are more whites than any other race in the population, meaning they have more deaths.
-In order to account for this, we instead visualized race and cause of death using weighted race deaths (see "Created Weighed Race Deaths" tab). This easily allows us to compare how likely different races are to die of a given cause of death.
-Our interesting findings is that of the three highest causes of deaths: cancer, heart disease, and "other", blacks are, on average, more likely to die than any other race, taking into account their numbers in the total population.
 
-#####**Median Age Barchart**
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/AgeReferenceLines1.png")
-```
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/AgeReferenceLines2.png")
-```
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/AgeReferenceLines3.png")
-```
-
-Looking at the tables on the left, which show the unweighted death counts, one would think people who make between 30 and 40 thousand dollars per year are more likely to die from just about everything. However, this is simply because there are more people in that income range than any other in the population, meaning they have more deaths.
-In order to account for this, we instead visualized race and cause of death using weighted income deaths (see "Created Weighed Income Deaths" tab). This easily allows us to compare how likely people in different income ranges are to die of a given cause of death
-Our interesting finding is that heart disease and cancer are the most likely cause of death across all age groups. 
-For cancer we can notice that a larger proportion of people in age groups below 50 years are dying of cancer compared to people in age groups of 60 and above.
- 
-
-####**Visualization 3 - ID Sets - Income ID - In, Out**
-
-The visualization below uses Sets to depict income brackets that are either "at-risk"" or not "at-risk." In this case, "at-risk" refers to income brakcets that have a weighted death rate of 7 or more. The orange portions of each bar show the amount of deaths within the "at-risk income brackets" set. The grey portions are those out of the set, as their weighted death rate is below 7.
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/IncomeIDSets-In-Out.png")
-```
-In order to create the set, we selected the income brackets that had a weighted income death rate greater than 7. These were included in the "In" set.
 
 #**Shiny Visualization Steps**
 Link: https://anandpant.shinyapps.io/project_6/
 
-The shiny app creates a barchart using causes of death and either median income, median age, or dominant race. This data is brought in from the data.world files which join census data to the causes of death files. This is created with an inner join on the zip code in both files. The SQL to join is found in the server code for our shiny aplication. 
+The shiny app creates plots using queries set to bring in data of interest from data.world. In these queries Census data is joined to the causes of death files. This is created with an inner join on the zip code in both files. The SQL to join is found in the server code for our shiny aplication. 
 
 The user should click on the get data button. This button sends a SQL query to data.world to join and bring in  the data set mentioned above. 
 
-The returned data set will be used with ggplot code to create barcharts that show the count of deaths. The rows of the barcharts list the different Causes of Deaths and the different barcharts depict different age groups (for example). Each of the barcharts have a reference line to show the average count of deaths in that age group.
+The returned data set will be used by ggplot code to create the different visualizations shown below. 
 
 ####**Step 1**
 Navigate to 02 Shiny and open Server.R
@@ -211,6 +135,10 @@ Select get data. The barchart will be created. You can view the barchart by clic
 
 
 #**Shiny Visualizations**
+
+####**Shiny - Scatter Plot Tab**
+The scatter plot created has a point corresponding to the count of deaths of each cause per zip code. These points are organized along the x axis by their median age and placed along the y axis by their count of deaths. The color each point is assigned by the cause of death the count represents. From the plot we can make the observation that median age of zip codes are normally distributed about age. This can be noted by the larger count of deaths in the middle of the plot since most zip codes have middle aged median age zip codes.Less deaths occur in the highest a lowest median age zip codes. 
+
 ####**Shiny - Data Tab**
 
 The image below shows the data tab panel. Using the query from the server file, this tab is used to display the joined information pulled in from data.world. This data is used to create a barchart. The image below shows the data table for median age, the same is created from median income, and dominant race. 
