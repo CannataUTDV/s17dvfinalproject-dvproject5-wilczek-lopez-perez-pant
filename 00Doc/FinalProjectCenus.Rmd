@@ -72,7 +72,7 @@ Pages were added to the visualization with respect to cause of death. Each page 
 Based on this data a map was created in a separate sheet. Points in the state of California correspond to the zip codes sampled. The size of the points correspond to the median income of each zip code.The color of each point corresponds to the most represented race in each zip code.
 
 ####**Step 4 -Zip Code Lines Map**
-In addition, another map was reproduced in a different sheet dividing the state of california by zip code lines. Death count is represented as the color of the area of each zip code. A filter was created to only display zip codes with a the chosen range of deaths. 
+In addition, another map was reproduced in a different sheet dividing the state of california by zip code lines. Death count is represented as the color of the area of each zip code. A filter was created to only display zip codes with a the chosen range of deaths. From this map we note that the zip code with most deaths due to cancer is located in NAPA valley. This location is known for mass farming. We would be intrested in knowing if pesticides used in the area could account for the highest cancer rates seen in the state of California.
 
 ####**Step 3 -Actions**
 Both maps produced were set as a target sheets which can filter to only show zip codes displayed in the chosen page in the scatter plot sheet. Therefore, only zip codes affected by a certain cause of deaths will be displayed in the map if the corresponding cause is the selected page.
@@ -98,17 +98,6 @@ The parameter represented by reference lines takes the average of the averages o
 
 ####**Step 4 - Table Calculations**
 The table calculation takes the calculated average used as the parameter for our refernce line and subtracts this number from the average counts in each bar(resulting in a difference for each median income). This calculation is refered to as the difference from the average.
-
-#**Tableau Visualizations**
-
-##**Visualization Type 1 - Bar Graphs**
-
-
-
-
-
-
-
 
 
 #**Shiny Visualization Steps**
@@ -144,50 +133,23 @@ In order to create our box plot we set causes of death as  the x-axis of the plo
 We added a filter to this boxplot which will plot according to data from zip codes within the chosen range of death counts. 
 
 ####**Histogram Tab**
-The histogram displayed is created by grouping zip codes of different median ages to bins with ranges of about 3 years. The zip codes corresponding to the median ages assigned by each zip code have their count of deaths summed and displayed as the columns of the plot.
+The histogram displayed is created by grouping zip codes of different median ages to bins with ranges of 5 years. The zip codes corresponding to the median ages assigned by each zip code have their count of deaths summed and displayed as the columns of the plot.
 
 ####**Scatter Plot Tab**
 The scatter plot created has a point corresponding to the count of deaths of each cause per zip code. These points are organized along the x axis by their median age and placed along the y axis by their count of deaths. The color each point is assigned by the cause of death the count represents. From the plot we can make the observation that median age of zip codes are normally distributed about age. This can be noted by the larger count of deaths in the middle of the plot since most zip codes have middle aged median age zip codes.Less deaths occur in the highest a lowest median age zip codes. 
+The increase in count of deaths around median age of 40 can be explained by the increased risk for heart disease seen in males over the age of 45. High numbers of over 45 year olf males may account for the rise in deaths.
+
+####**Crosstab Tab**
+The cross tab created has causes of death labled on the y-axis and dominant race in the x-axis. Each cell then displayed the sum of the count of deaths in the zip codes with a certain dominant race due to a certain cuase. In addition, before retrieving the data, users can define the ranges corresponding to a low, medium, and high KPI using the sliders in the data tab. The KPI we created was average deaths per zip code. This KPI takes the sum of the counts as displayed in the cells and divides that by the number of zip codes taken in to account in the sum of the counts. This definition of high, low and medium average deaths per zip codes is taken by the query sent to data.world. The query returns a column in the data defining whether a cause of death and dominant race combination has a high, low or medium average deaths per zip code. This parameter is then used to color the cells in the crosstab with its corresponding level of average deaths.  
+
+From this plot we notice heart disease accounted for more deaths per zip code for all races when compared to deaths due to cancer. This leads us to believe that genetic links to heart disease are less relevant as opposed to the health habits of all people regradless of race.
+
+We also notice that only whites and american indian dominated zip codes suffered deaths due to injury in the same order of magnitude as their corresponding deaths due to heart diesease. The same cannot be said about the rest of the races.
+
+####**Bar Chart Tab**
+For our barchart, median age zip codes were grouped together. These groupings were then each divided by cause of death as seen in the y axis. The length of the bars account for the average death count per zip code for a certain cause of death in zip codes of a certain median age range. In addition a reference line was added to each median age grouping. This line indicates the average of the average deaths per zip codes in each grouping. The numbers labeled next to the bars correspond to the average of the average death count per zip code. From this plot we notice average deaths per zip code due to injury doubles when moving from zip codes from ages 60-70 to zip codes with median ages 70-80.  
 
 
-
-
-
-
-####**Shiny -  Median Age Bar Chart**
-
-This screeen shot shows the barchart tab pannel using the data pulled in from data.world. The horizontal bars represent counts of death. The rows are grouped by median age, therefore each set of bars corresponds to zip codes of specific median age. Within each grouped median age, the count of death is grouped by cause of death. Therefore each bar represents the count of deaths due to a specific cause within zip codes of a certain median age. In addition, a reference line is added for each group of counts of a median age. This reference line marks the average count of deaths due to a cause of death in zip codes with a certain median age. The numbers next to the bars represent the difference in count due to a cause of death compared to the average amount of deaths per cause. 
-
-The same is created for median income, and dominant race.
-
-We find out from this data that heart disease and cancer caused more deaths than the average cause in all zip codes regardless of median age.
-
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/BarChartShiny.png")
-```
-
-
-####**Shiny -  Median Income Bar Chart**
-This image shows the barchart created from grouping zip codes by median income.
-
-From the refernce line we can note that the count of deaths by suicide has a tendency to grow closer to the average as median income increases.
-
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/IncomeShiny.png")
-```
-
-
-####**Shiny -  Dominant Race Bar Chart Finding**
-
-This image shows the barchart created from grouping zip codes by dominant race.
-
-From this barchart we find out that only american indian dominated zip codes suffered deaths due to injuries above the average count of deaths due to a cause. All other races had deaths due to injury below the cause death average.
-
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/RaceShiny.png")
-```
 
 #**Key for Causes of Death Abbreviations**
 Cause-of-death were coded using the Tenth Revision of the International Classification of Diseases codes (ICD-10). This is in the same data.world profile (@health) that we retrieved our data for the count of deaths by causes from.
