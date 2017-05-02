@@ -2,7 +2,7 @@ require(readr)
 require(plyr)
 
 # Set the Working Directory to the 00 Doc folder
-file_path = "../01Data/median_age.csv"
+file_path = "../01Data/Median_Age_Raw.csv"
 df <- readr::read_csv(file_path)
 print(head(df))
 
@@ -52,5 +52,5 @@ if( length(measures) > 1) {
   }
 }
 
-write.csv(df, file="../01Data/median_age.csv", row.names=FALSE, na = "NA")
+write.csv(df, file="../01Data/Median_Age_Raw.csv", row.names=FALSE, na = "NA")
 print(head(df))

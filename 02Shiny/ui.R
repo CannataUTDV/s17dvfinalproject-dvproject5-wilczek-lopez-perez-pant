@@ -14,7 +14,7 @@ dashboardPage(
       menuItem("Histograms", tabName = "histogram", icon = icon("dashboard")),
       menuItem("Scatter Plots", tabName = "scatter", icon = icon("dashboard")),
       menuItem("Crosstabs, KPIs, Parameters", tabName = "crosstab", icon = icon("dashboard")),
-      menuItem("Barcharts, Table Calculations, and extra credit map", tabName = "barchart", icon = icon("dashboard"))
+      menuItem("Barcharts, Calculations, Map", tabName = "barchart", icon = icon("dashboard"))
     )
   ),
   dashboardBody(
@@ -39,9 +39,9 @@ dashboardPage(
                                      min = min(globals$sum_count), max = max(globals$sum_count), 
                                      value = c(min(globals$sum_count), max(globals$sum_count))),
                          # sliderInput("range5a", "Loop through Income:", 
-                         #             min(globals$medianof), 
-                         #             max(globals$medianof) + 30000, 
-                         #             max(globals$medianof), 
+                         #             min(globals$median_income), 
+                         #             max(globals$median_income) + 30000, 
+                         #             max(globals$median_income), 
                          #             step = 10000,
                          #             animate=animationOptions(interval=2000, loop=T)),
                          plotlyOutput("boxplotPlot1", height=500))
@@ -53,8 +53,7 @@ dashboardPage(
               tabsetPanel(
                 tabPanel("Data",  
                          radioButtons("rb4", "Get data from:",
-                                      c("SQL" = "SQL",
-                                        "CSV" = "CSV"), inline=T),
+                                      c("SQL" = "SQL"), inline=T),
                          actionButton(inputId = "click4",  label = "To get data, click here"),
                          hr(), # Add space after button.
                          DT::dataTableOutput("histogramData1")
@@ -68,8 +67,7 @@ dashboardPage(
               tabsetPanel(
                 tabPanel("Data",  
                          radioButtons("rb3", "Get data from:",
-                                      c("SQL" = "SQL",
-                                        "CSV" = "CSV"), inline=T),
+                                      c("SQL" = "SQL"), inline=T),
                          uiOutput("scatterStates"), # See http://shiny.rstudio.com/gallery/dynamic-ui.html,
                          actionButton(inputId = "click3",  label = "To get data, click here"),
                          hr(), # Add space after button.
@@ -84,12 +82,11 @@ dashboardPage(
         tabsetPanel(
             tabPanel("Data",  
               radioButtons("rb1", "Get data from:",
-                c("SQL" = "SQL",
-                  "CSV" = "CSV"), inline=T),
+                c("SQL" = "SQL"), inline=T),
               sliderInput("KPI1", "KPI_Low:", 
-                          min = 0, max = .1,  value = .1),
+                          min = 0, max = 0.1,  value = 0.1),
               sliderInput("KPI2", "KPI_Medium:", 
-                          min = .1, max = .2,  value = .2),
+                          min = 0.1, max = 0.2,  value = 0.2),
               actionButton(inputId = "click1",  label = "To get data, click here"),
               hr(), # Add space after button.
               DT::dataTableOutput("data1")
