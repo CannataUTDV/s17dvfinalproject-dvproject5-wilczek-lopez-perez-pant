@@ -235,7 +235,7 @@ shinyServer(function(input, output) {
   })
   # End Box Plot Tab ___________________________________________________________
   
-  # Begin Histgram Tab ------------------------------------------------------------------
+  # Begin Histogram Tab ------------------------------------------------------------------
   dfh1 <- eventReactive(input$click4, {
     if(online4() == "SQL") {
       print("Getting from data.world")
@@ -249,7 +249,6 @@ shinyServer(function(input, output) {
         group by deaths_clean.`Causes of Death`, `Median_Age_Raw.csv/Median_Age_Raw`.`Median Age`"
       ) # %>% View()
     }
-    
     })
   
   output$histogramData1 <- renderDataTable({DT::datatable(dfh1(), rownames = FALSE,
@@ -376,9 +375,11 @@ shinyServer(function(input, output) {
       facet_wrap(~median_age, ncol=1) + 
       coord_flip() + 
       # Add sum_sales - window_avg_sales label.
-      geom_text(mapping=aes(x=causeof, y=Weighted_sum_count, label=round(Weighted_sum_count)),colour="red", hjust=-.5) +
+      geom_text(mapping=aes(x=causeof, y=Weighted_sum_count, label=round(Weighted_sum_count)),colour="blue", hjust=-.5) +
       # Add reference line.
-      geom_hline(aes(yintercept = round(window_countof)), color="red")
+      geom_hline(aes(yintercept = round(window_countof)), color="red") +
+      geom_text(aes(-1,window_countof, label = round(window_countof,2), vjust = -.5, hjust =-.25), color = "red") +
+      labs(title = "Causes of Death across Age groups")
   })
   
   thismap = query(
