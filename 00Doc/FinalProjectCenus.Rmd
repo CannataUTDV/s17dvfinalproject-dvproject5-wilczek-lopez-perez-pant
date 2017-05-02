@@ -47,7 +47,7 @@ We pulled in 3 grouped data sets from our project that originated from the US Ce
 ##**Boxplot Visualization Steps**
 
 ####**Step 1 - Boxplot Overview**
-In order to create our box plot we set causes of deathas the columns which can be seen along the x-axis of the plot. The row are set as the count of deaths as seen on the y-axis of the plot. Each zip code has a corresponding point on the boxplot for each cause of death. We set dominant race as the color of the points in the plot. Therefore, the color of each point depends on each zip code's dominant race. The boxes along each column mark the 25th to 75th percentile of counts of deaths per zip code for each cause. The whiskers mark the highest and lowest count values considered to not be outliers. 
+In order to create our box plot we set causes of death as the columns which can be seen along the x-axis of the plot. The row are set as the count of deaths as seen on the y-axis of the plot. Each zip code has a corresponding point on the boxplot for each cause of death. We set dominant race as the color of the points in the plot. Therefore, the color of each point depends on each zip code's dominant race. The boxes along each column mark the 25th to 75th percentile of counts of deaths per zip code for each cause. The whiskers mark the highest and lowest count values considered to not be outliers. 
 
 ####**Step 2 - Filter**
 We added a filter to this boxplot in order to define the range of the median incomes of the zipcodes displyed. 
@@ -112,7 +112,7 @@ The table calculation takes the calculated average used as the parameter for our
 
 
 #**Shiny Visualization Steps**
-Link: https://anandpant.shinyapps.io/project_6/
+Link: https://anandpant.shinyapps.io/project_final/
 
 The shiny app creates plots using queries set to bring in data of interest from data.world. In these queries Census data is joined to the causes of death files. This is created with an inner join on the zip code in both files. The SQL to join is found in the server code for our shiny aplication. 
 
@@ -136,16 +136,22 @@ Select get data. The barchart will be created. You can view the barchart by clic
 
 #**Shiny Visualizations**
 
-####**Shiny - Scatter Plot Tab**
+####**Shiny - Data Tab**
+The image below shows the data tab panel. This is found in ever tab in our application. It displays the data we use in our visualization in a tabulated format. This data is the data we query from data.world which is queried upon selecting the get data button.
+
+####** Boxplot Tab**
+In order to create our box plot we set causes of death as  the x-axis of the plot. The y axis is set as the count of deaths. Each set of zip code for each dominant race has a corresponding box and whisker plot for each case of death. We set dominant race as the color of the boxes in the plot. The boxes along each column mark the 25th to 75th percentile of counts of deaths per zip code for each cause. The whiskers mark the highest and lowest count values considered to not be outliers. From this plot we notice heart disease accounts for the highest counts of deaths for all races.
+We added a filter to this boxplot which will plot according to data from zip codes within the chosen range of death counts. 
+
+####**Histogram Tab**
+The histogram displayed is created by grouping zip codes of different median ages to bins with ranges of about 3 years. The zip codes corresponding to the median ages assigned by each zip code have their count of deaths summed and displayed as the columns of the plot.
+
+####**Scatter Plot Tab**
 The scatter plot created has a point corresponding to the count of deaths of each cause per zip code. These points are organized along the x axis by their median age and placed along the y axis by their count of deaths. The color each point is assigned by the cause of death the count represents. From the plot we can make the observation that median age of zip codes are normally distributed about age. This can be noted by the larger count of deaths in the middle of the plot since most zip codes have middle aged median age zip codes.Less deaths occur in the highest a lowest median age zip codes. 
 
-####**Shiny - Data Tab**
 
-The image below shows the data tab panel. Using the query from the server file, this tab is used to display the joined information pulled in from data.world. This data is used to create a barchart. The image below shows the data table for median age, the same is created from median income, and dominant race. 
 
-```{r, out.width = "400px"}
-knitr::include_graphics("../03Visualizations/GetDataShiny.png")
-```
+
 
 
 ####**Shiny -  Median Age Bar Chart**
